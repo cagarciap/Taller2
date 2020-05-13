@@ -19,5 +19,9 @@ from calidad_aire import views as calidad_aire_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', calidad_aire_views.calidad_aire, name='calidad_aire'),
+    path('', calidad_aire_views.Inicio, name='Inicio'),
+    path('agregarFormulario', calidad_aire_views.formularioAgregar, name='agregarFormulario'),
+    path('visualizarElemetos', calidad_aire_views.calidad_aire, name='visualizarElemetos'),
+    path('agregar', calidad_aire_views.calidad_aire, name='agregar'),
+    #path('', calidad_aire_views.calidad_aire, name='calidad_aire'),
 ]

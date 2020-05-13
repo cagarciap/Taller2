@@ -1,5 +1,34 @@
 from django.shortcuts import render, HttpResponse
 import requests
+from django.shortcuts import render
+import pyrebase
+from django.contrib import auth
+
+config = {
+    'apiKey': "AIzaSyB_0Gc1XK3BUwu8UKmaffIEH9tlkQvWKXI",
+    'authDomain': "integradortaller3.firebaseapp.com",
+    'databaseURL': "https://integradortaller3.firebaseio.com",
+    'projectId': "integradortaller3",
+    'storageBucket': "integradortaller3.appspot.com",
+    'messagingSenderId': "490129345475",
+    'appId': "1:490129345475:web:fda045bc53d76c273f8b76",
+}
+
+firebase = pyrebase.initialize_app(config)
+authe = firebase.auth()
+database = firebase.database()
+
+
+diccionario ={}
+
+def Inicio(request):
+    return render(request, "calidad_aire/inicio.html")
+
+def formularioAgregar(request):
+    return render(request, "calidad_aire/formularioAgregar.html")
+
+def visualizar(request):
+    return render(request, "calidad_aire/visualizar.html")
 
 def calidad_aire(request):
     # Verifica si hay un parámetro value en la petición GET
@@ -9,6 +38,7 @@ def calidad_aire(request):
         if value:
             # Crea el json para realizar la petición POST al Web Service
             args = {'type': 'PPM', 'value': value}
+            database.child('prueba').push(args)
             response = requests.post('http://127.0.0.1:9000/reports/', args)
             # Convierte la respuesta en JSON
             measure_json = response.json()
