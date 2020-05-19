@@ -2,13 +2,35 @@
 {% block content %}
 <div class="container">
     <form method="get">
-        <input type="number" name="value">
+        <label>Valor Medicion</label><br>
+        <input type="number" name="value" required><br><br><br>
+        <label>Codigo</label><br>
+        <input type="text" name="codigo" required><br><br><br>
+        <label>Latitud</label><br>
+        <input type="text" name="latitud" required><br><br><br>
+        <label>Longitud</label><br>
+        <input type="text" name="longitud" required><br><br><br>
+        <label>Area</label><br>
+        <input type="number" name="area" required><br><br><br>
+        <label>Producto</label><br>
+        <select name="producto" required>
+            <option value="Leche">Leche</option>
+            <option value="Cacao">Cacao</option>
+            <option value="Flores">Flores</option>
+            <option value="Hortalizas">Hortalizas</option>
+            <option value="Carne">Carne</option>
+        </select><br><br><br>
         <button type="submit">Adicionar</button>
     </form>
     </form>
     {% for measure in measures %}
     <ul class="list-group">
         <li class="list-group-item">{{measure.type}} = {{measure.value}}</li>
+        <li class="list-group-item">Codigo = {{measure.codigo}}</li>
+        <li class="list-group-item">Latitud = {{measure.latitud}}</li>
+        <li class="list-group-item">Longitud = {{measure.longitud}}</li>
+        <li class="list-group-item">Area = {{measure.area}}</li>
+        <li class="list-group-item">Producto = {{measure.producto}}</li>
     </ul>
     {% endfor %}
 </div>

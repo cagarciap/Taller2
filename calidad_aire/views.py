@@ -36,8 +36,13 @@ def calidad_aire(request):
         value = request.GET['value']
         # Verifica si el value no esta vacio
         if value:
+            codigo = request.GET.get('codigo')
+            latitud = request.GET.get('latitud')
+            longitud = request.GET.get('longitud')
+            area = request.GET.get('area')
+            producto = request.GET.get('producto')
             # Crea el json para realizar la petición POST al Web Service
-            args = {'type': 'PPM', 'value': value}
+            args = {'type': 'PPM', 'value': value, 'codigo':codigo, 'latitud':latitud, 'longitud':longitud, 'area':area, 'producto':producto}
             database.child('prueba').push(args)
             response = requests.post('http://127.0.0.1:9000/reports/', args)
             # Convierte la respuesta en JSON
