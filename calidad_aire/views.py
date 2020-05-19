@@ -31,26 +31,43 @@ def visualizar(request):
     return render(request, "calidad_aire/visualizar.html")
 
 def calidad_aire(request):
-    # Verifica si hay un parámetro value en la petición GET
-    if 'value' in request.GET:
-        value = request.GET['value']
-        # Verifica si el value no esta vacio
-        if value:
-            codigo = request.GET.get('codigo')
-            latitud = request.GET.get('latitud')
-            longitud = request.GET.get('longitud')
-            area = request.GET.get('area')
-            producto = request.GET.get('producto')
-            # Crea el json para realizar la petición POST al Web Service
-            args = {'type': 'PPM', 'value': value, 'codigo':codigo, 'latitud':latitud, 'longitud':longitud, 'area':area, 'producto':producto}
-            database.child('prueba').push(args)
-            response = requests.post('http://127.0.0.1:9000/reports/', args)
-            # Convierte la respuesta en JSON
-            measure_json = response.json()
+    codigo = request.GET.get('codigo')
+    latitud = request.GET.get('latitud')
+    longitud = request.GET.get('longitud')
+    area = request.GET.get('area')
 
-    # Realiza una petición GET al Web Services
-    response = requests.get('http://127.0.0.1:9000/reports/')
-    # Convierte la respuesta en JSON
-    measures = response.json()
-    # Rederiza la respuesta en el template measure
-    return render(request, "calidad_aire/calidad_aire.html", {'measures': measures})
+    try:
+        area = float(area)
+        if area >= 0:
+            try:
+                latitud = float(latitud)
+                try:
+                    longitud = float(longitud)
+                    producto = request.GET.get('producto')
+                    # Crea el json para realizar la petición POST al Web Service
+                    args = {'codigo': codigo, 'latitud': latitud, 'longitud': longitud, 'area': area, 'producto': producto}
+                    database.child('prueba').push(args)
+                    response = requests.post('http://127.0.0.1:9000/reports/', args)
+                    # Convierte la respuesta en JSON
+                    measure_json = response.json()
+
+                    # Realiza una petición GET al Web Services
+                    response = requests.get('http://127.0.0.1:9000/reports/')
+                    # Convierte la respuesta en JSON
+                    measures = response.json()
+                    # Rederiza la respuesta en el template measure
+                    return render(request, "calidad_aire/calidad_aire.html", {'measures': measures})
+                except ValueError:
+                    mensaje = "Error en la Longitud"
+                    return render(request, "calidad_aire/error.html", {'mensaje': mensaje})
+            except ValueError:
+                    mensaje = "Error en la Latitud"
+                    return render(request, "calidad_aire/error.html", {'mensaje': mensaje})
+        else:
+            mensaje = "Error en el área"
+            return render(request, "calidad_aire/error.html", {'mensaje': mensaje})
+    except ValueError:
+        mensaje = "Error en el área"
+        return render(request, "calidad_aire/error.html", {'mensaje': mensaje})
+
+
